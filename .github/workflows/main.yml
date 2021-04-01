@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@master
+    - name: Check ouyt the repo
+      uses: actions/checkout@master
     - name: Deploy code to Lambda
-      uses: bhargav/py-lambda-action@v1.0.0
+      uses: mariamrf/py-lambda-action@v1.0.0
       with:
         lambda_layer_arn: 'arn:aws:lambda:us-west-2:948254249255:function:github_demo'
         lambda_function_name: 'github_demo'
