@@ -1,21 +1,26 @@
-name: deploy-py-lambda
+name: "deploy-py-lambda"
+
 on:
   push:
-    branches:
+    branches: 
       - master
+
+
 jobs:
-  build:
+  zip_n_publish:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Check ouyt the repo
-      uses: actions/checkout@master
-    - name: Deploy code to Lambda
-      uses: mariamrf/py-lambda-action@v1.0.0
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    - name: Zip the Code
+      uses: montudor/action-zip@v0.1.0
+      with: 
+        args: zip -jr ./sample_test.zip sample_test
+    - name: Lambda Deploy Zip File
+      uses: appleboy/lambda-action@master
       with:
-        lambda_layer_arn: 'arn:aws:lambda:us-west-2:948254249255:function:github_demo'
-        lambda_function_name: 'github_demo'
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: 'us-west-2'
+       aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+       aws_region: 'us-west-2'
+       function_name: github_demo
+       zip_file: sample_test.zip
